@@ -13,6 +13,7 @@ import { SAVE_BOOK } from '../utils/mutations';
 import Auth from '../utils/auth';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 
+
 const SearchBooks = () => {
   const [searchedBooks, setSearchedBooks] = useState([]);
   const [searchInput, setSearchInput] = useState('');
@@ -33,7 +34,7 @@ const SearchBooks = () => {
   });
 
   // Mutation hook for saving a book
-  const [saveBook] = useMutation(SAVE_BOOK);
+  const [saveBook, {error: saveError}] = useMutation(SAVE_BOOK);
 
   // useEffect hook to save `savedBookIds` to localStorage on component unmount
   useEffect(() => {
@@ -59,14 +60,19 @@ const SearchBooks = () => {
   // Handle saving a book
   const handleSaveBook = async (bookId) => {
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
+    console.log(bookToSave);
     const token = Auth.loggedIn() ? Auth.getToken() : null;
+    console.log(Auth.loggedIn());
+    console.log(Auth.getToken());
 
     if (!token) {
+        console.log('No token found');
       return false;
     }
 
     try {
-      const { data } = await saveBook({
+        console.log('Trying to save book');
+      const { data, errors } = await saveBook({
         variables: { bookData: { ...bookToSave } },
         context: {
           headers: {
@@ -75,7 +81,15 @@ const SearchBooks = () => {
         }
       });
 
+      if (errors) {
+        console.log(errors);
+        throw new Error('Something went wrong!');
+        }
+
+      console.log(data);
+
       if (data) {
+        console.log('Book saved!');
         // Update state and localStorage
         setSavedBookIds([...savedBookIds, bookToSave.bookId]);
       }
