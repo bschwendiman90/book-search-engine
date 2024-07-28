@@ -34,7 +34,7 @@ const SearchBooks = () => {
   });
 
   // Mutation hook for saving a book
-  const [saveBook, {error: saveError}] = useMutation(SAVE_BOOK);
+  const [saveBook] = useMutation(SAVE_BOOK);
 
   // useEffect hook to save `savedBookIds` to localStorage on component unmount
   useEffect(() => {
@@ -62,8 +62,8 @@ const SearchBooks = () => {
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
     console.log(bookToSave);
     const token = Auth.loggedIn() ? Auth.getToken() : null;
-    console.log(Auth.loggedIn());
     console.log(Auth.getToken());
+    console.log(Auth.loggedIn());
 
     if (!token) {
         console.log('No token found');
@@ -82,7 +82,7 @@ const SearchBooks = () => {
       });
 
       if (errors) {
-        console.log(errors);
+        console.log('mutation errors;', errors);
         throw new Error('Something went wrong!');
         }
 
@@ -94,7 +94,7 @@ const SearchBooks = () => {
         setSavedBookIds([...savedBookIds, bookToSave.bookId]);
       }
     } catch (err) {
-      console.error(err);
+      console.error('Error saving book;', err.message);
     }
   };
 

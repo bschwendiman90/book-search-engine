@@ -16,7 +16,13 @@ import { removeBookId } from '../utils/localStorage';
 const SavedBooks = () => {
   const [userData, setUserData] = useState({});
 
-    const { loading, data } = useQuery(GET_ME);
+  const { loading, data } = useQuery(GET_ME, {
+    context: {
+      headers: {
+        authorization: `Bearer ${Auth.getToken()}`,
+      },
+    },
+  });
 
   const [removeBook] = useMutation(REMOVE_BOOK);
   

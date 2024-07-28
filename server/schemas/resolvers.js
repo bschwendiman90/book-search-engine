@@ -1,11 +1,12 @@
 const { AuthenticationError } = require('apollo-server-express');
 const { User } = require('../models');
-const { signToken } = require('../utils/auth');
+const { signToken, authMiddleware } = require('../utils/auth');
 const { searchGoogleBooks} = require('../utils/searchBooks');
 
 const resolvers = {
   Query: {
     me: async (parent, args, context) => {
+        console.log('Context:', context);
       if (context.user) {
         // Ensure context.user is populated correctly
         return User.findOne({ _id: context.user._id }).populate('savedBooks');
@@ -69,6 +70,7 @@ const resolvers = {
       return { token, user };
     },
     saveBook: async (parent, { bookData }, context) => {
+        console.log('Context:', context);
       if (context.user) {
         const updatedUser = await User.findByIdAndUpdate(
           { _id: context.user._id },
