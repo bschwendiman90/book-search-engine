@@ -40,7 +40,7 @@ const startApolloServer = async () => {
 
   // Serve static assets in production
   if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../client/build')));
+    app.use(express.static(path.join(__dirname, '../client/dist')));
   }
 
   // Root route for sanity check

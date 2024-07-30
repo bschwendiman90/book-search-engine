@@ -37,6 +37,8 @@ const SignupForm = () => {
             },
         });
 
+        console.log(data);
+
       const { token, user } = data.addUser;
       console.log(user);
       Auth.login(token);
